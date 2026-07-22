@@ -22,8 +22,7 @@ I am an AI Specialist and the Head of Deep Learning at Mecha ML. I bridge the ga
 ---
 
 # The Action (Contact / CTA)
-Whether you need rigorous AI research or a deployed production pipeline, I can build it. Email me to discuss your next feature.
-[Email Me Button] / [GitHub Link]
+Whether you need rigorous AI research or a deployed production pipeline, I can build it. Stop endlessly planning your AI features. Email me to build them. [Contact Assem](mailto:assemelqersh@gmail.com) | [View GitHub](https://github.com/Assem-ElQersh)
 
 ---
 
