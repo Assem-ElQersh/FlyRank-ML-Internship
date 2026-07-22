@@ -54,10 +54,6 @@ In this upgraded system, the LLM controls the routing, the error handling, and t
 
 ## 4. MCP Proof of Execution (Deliverable)
 
-*(**Note to Self:** Paste screenshots below showing Claude Desktop connected to a local MCP server (e.g., the local filesystem or SQLite server) executing 3 tool calls that chat alone could not do: e.g., reading a local file, creating a new directory, and writing a file).*
-
-[ PASTE SCREENSHOT 1 HERE - Tool Call: Reading Local File ]
-
-[ PASTE SCREENSHOT 2 HERE - Tool Call: Executing Query / Fetching Live Data ]
-
-[ PASTE SCREENSHOT 3 HERE - Tool Call: Writing Local File ]
+**Proof of execution:**
+![MCP Tool Calls in Cursor](mcp_screenshot.png)
+*(Cursor AI autonomously reading `FL-09_Agent_Concepts.md`, listing files in `data/raw/`, and creating `mcp_proof.txt` using the `@modelcontextprotocol/server-filesystem`.)*
