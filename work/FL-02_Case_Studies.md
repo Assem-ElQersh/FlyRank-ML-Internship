@@ -1,5 +1,5 @@
 # Voice Card
-**Direct, technical, practical, no-nonsense, execution-focused.**
+**Rigorous, technical, practical, no-nonsense, execution-focused.**
 
 ---
 
@@ -17,12 +17,12 @@ The deployed model achieved a Precision@50 of 74%—more than 3x better than the
 ---
 
 # About The Builder (Bio)
-I am an AI Generalist. I don't spend 6 months tweaking hyperparameters on toy datasets or publishing theoretical papers. I take messy, undefined business problems and rapidly deploy end-to-end AI pipelines across Computer Vision, NLP, and Machine Learning to solve them. 
+I am an AI Specialist and the Head of Deep Learning at Mecha ML. I bridge the gap between academic research and production engineering. With deep expertise across Computer Vision, NLP, and Medical Imaging, I don't just understand the theoretical math behind state-of-the-art models—I know how to architect, optimize, and deploy them to solve immediate, high-stakes business problems. I am a Kaggle Expert who thrives on bringing order to messy datasets and shipping robust AI pipelines.
 
 ---
 
 # The Action (Contact / CTA)
-Stop endlessly planning your AI features. Email me to build them.
+Whether you need rigorous AI research or a deployed production pipeline, I can build it. Email me to discuss your next feature.
 [Email Me Button] / [GitHub Link]
 
 ---
@@ -30,4 +30,3 @@ Stop endlessly planning your AI features. Email me to build them.
 # The "Before / After" AI Edit
 **Generic AI Draft:** "I leveraged cutting-edge machine learning algorithms to synergize data streams and optimize content delivery."
 **My Edited Version:** "I trained a Random Forest model to score 30,000 pages and tell editors exactly which 50 to fix first."
-
