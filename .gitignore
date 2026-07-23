@@ -34,3 +34,7 @@ __pycache__/
 .venv/
 venv/
 .env
+
+# --- IDEs and Agent Temp Files ---------------------------------------------
+.cursor/
+work/mcp_proof.txt
