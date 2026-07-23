@@ -3,55 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assem ElQersh - AI Engineer</title>
+    <title>Assem ElQersh - AI & DL Engineer</title>
     <link rel="stylesheet" href="index.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <nav>
-        <div class="logo">AE</div>
+        <div class="logo">Assem ElQersh</div>
         <div class="links">
-            <a href="#work">Work</a>
             <a href="#about">About</a>
-            <a href="mailto:assem.elqersh@gmail.com" class="btn">Email Me</a>
+            <a href="#projects">Projects</a>
+            <a href="#research">Research</a>
+            <a href="#writing">Writing</a>
+            <a href="mailto:assemsaid35@gmail.com" class="btn">Reach Out</a>
         </div>
     </nav>
 
     <header class="hero">
-        <h1>I build the rigorous, production-ready AI pipelines that solve your immediate business bottlenecks.</h1>
-        <p>Head of Deep Learning & AI Engineer bridging the gap between academic research and production engineering.</p>
-        <a href="#work" class="btn-primary">View the Code</a>
+        <span class="badge">Available for AI/DL roles</span>
+        <h1>I build intelligent solutions with AI & DL.</h1>
+        <p>Computer Engineer & AI/DL Specialist bridging the gap between academic research and production engineering in Computer Vision, NLP, and Generative AI.</p>
+        <div class="hero-stats">
+            <div class="stat"><strong>30+</strong><span>Projects built</span></div>
+            <div class="stat"><strong>AI/DL</strong><span>Core focus</span></div>
+            <div class="stat"><strong>IEEE</strong><span>Active contributor</span></div>
+        </div>
+        <a href="#projects" class="btn-primary">View Projects</a>
+        <a href="https://github.com/Assem-ElQersh" target="_blank" class="btn-outline">GitHub</a>
+        <a href="https://linkedin.com/in/assemelqersh" target="_blank" class="btn-outline">LinkedIn</a>
     </header>
 
-    <main id="work">
-        <section class="case-study">
-            <h2>Content Opportunity Scoring Pipeline</h2>
-            <h3>FlyRank Machine Learning Internship</h3>
-            <p><strong>Problem:</strong> Identifying which content on a client's website is decaying and needs an editorial refresh, without relying on black-box algorithms.</p>
-            <p><strong>Action:</strong> Engineered a robust ML pipeline. Started with a strict data contract and signal audit against 10M+ rows of Search Console data using DuckDB. Developed a transparent baseline action score (Stale * Visible * Recent Volume). Then, trained a constrained Random Forest (max_depth=5) using GroupShuffleSplit to predict traffic decline probability while preventing domain leakage.</p>
-            <p><strong>Outcome:</strong> Discovered that an honest, hard-coded business rule actually beat the generic ML model at predicting the extreme top-50 decaying pages (64.0% vs 58.0% Precision@50)—saving engineering time and proving business value over complex, opaque models.</p>
-            <div class="image-placeholder">[ Needs Image: Screenshot of DuckDB DataFrame in Colab ]</div>
-            <a href="https://github.com/Assem-ElQersh/FlyRank-ML-Internship" target="_blank" class="btn-outline">View the Pipeline on GitHub</a>
+    <main>
+        <section id="about" class="about">
+            <div class="about-content">
+                <img src="https://assemelqersh.com/img/profile.jpg" alt="Assem ElQersh" class="profile-img">
+                <div class="about-text">
+                    <h2>About Me</h2>
+                    <p><strong>Assem Saied ElQersh (عاصم سعيد القرش)</strong> is an AI Engineer based in Alexandria, Egypt. He is a Computer Science and Engineering graduate from the Egypt-Japan University of Science and Technology (E-JUST) and an active contributor to the IEEE Industrial Electronics Society.</p>
+                    <p>My work spans deep learning, computer vision, NLP, and applied GenAI using Python, PyTorch, TensorFlow, and modern web tooling. I enjoy turning complex ideas into reliable, practical products.</p>
+                    
+                    <h3>Core Skills</h3>
+                    <div class="skills-grid">
+                        <span class="skill-tag">PyTorch</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">Computer Vision</span>
+                        <span class="skill-tag">NLP</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">MongoDB</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <section class="case-study">
-            <h2>Deep Learning & Kaggle Experience</h2>
-            <h3>Head of Deep Learning | Kaggle Expert</h3>
-            <p>Extensive experience architecting and deploying models across Computer Vision and NLP. Recognized as a Kaggle Expert for consistent performance in competitive data science datasets.</p>
-            <div class="image-placeholder">[ Needs Image: Kaggle Expert Badge / Leaderboard Screenshot ]</div>
-            <a href="#" class="btn-outline">View Kaggle Profile</a>
+        <section id="projects" class="projects">
+            <h2>Featured Projects</h2>
+            <div class="project-grid">
+                
+                <div class="project-card">
+                    <img src="https://assemelqersh.com/img/Open%20Generative%20AI.png" alt="Open Generative AI" class="project-img">
+                    <div class="project-info">
+                        <span class="category">AI / Deep Learning</span>
+                        <h3>Open Generative AI</h3>
+                        <p>Open-source alternative to commercial AI image generation studios. Features 20+ models including Flux, SDXL, and Midjourney alternatives.</p>
+                        <div class="tags">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Generative AI</span>
+                        </div>
+                        <a href="https://github.com/anil-matcha/open-generative-ai" target="_blank" class="project-link">View Source Code &rarr;</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-info">
+                        <span class="category">Healthcare AI</span>
+                        <h3>MedFlow-V2</h3>
+                        <p>An AI-powered hospital management system integrated with robust clinical decision support models to streamline patient diagnosis and tracking.</p>
+                        <div class="tags">
+                            <span class="tech-tag">Computer Vision</span>
+                            <span class="tech-tag">PyTorch</span>
+                        </div>
+                        <a href="https://github.com/Assem-ElQersh" target="_blank" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-info">
+                        <span class="category">Developer Tools</span>
+                        <h3>RepoDigest & AIOps Brain</h3>
+                        <p>Local-first AI assistants and LLM ingestion pipelines designed to transform massive GitHub repositories into LLM-ready context chunks.</p>
+                        <div class="tags">
+                            <span class="tech-tag">NLP</span>
+                            <span class="tech-tag">FastAPI</span>
+                        </div>
+                        <a href="https://github.com/Assem-ElQersh" target="_blank" class="project-link">View on GitHub &rarr;</a>
+                    </div>
+                </div>
+
+            </div>
         </section>
+
+        <section id="research" class="research">
+            <h2>Research & Publications</h2>
+            <div class="card-list">
+                <div class="info-card">
+                    <span class="card-status published">Published</span>
+                    <h3>A Systematic Framework for Evaluating the Diagnostic Impact of Super-Resolution Models in Medical Imaging</h3>
+                    <p>Published in the 2025 13th International Japan-Africa Conference on Electronics, Communications, and Computations (JAC-ECC).</p>
+                    <a href="https://doi.org/10.1109/JAC-ECC67970.2025.11417605" target="_blank" class="project-link">View DOI &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="writing" class="writing">
+            <h2>Technical Writing</h2>
+            <div class="card-list">
+                <div class="info-card">
+                    <span class="card-status ieee">IEEE E-JUST SB</span>
+                    <h3>Scientific Publishing: Your Full Guide to Publish Your Paper</h3>
+                    <p>A comprehensive guide for researchers on navigating the scientific publishing process.</p>
+                    <a href="https://edu.ieee.org/eg-ejust/scientific-publishing/" target="_blank" class="project-link">Read Article &rarr;</a>
+                </div>
+                
+                <div class="info-card">
+                    <span class="card-status linkedin">LinkedIn</span>
+                    <h3>MedGemma: Google's Open-Source Medical AI for Healthcare Innovation</h3>
+                    <p>An analysis of Google's new medical LLM and its implications for clinical AI deployment.</p>
+                    <a href="https://www.linkedin.com/pulse/medgemma-googles-open-source-medical-ai-healthcare-assem-elqersh-ohajf" target="_blank" class="project-link">Read Article &rarr;</a>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <section id="about" class="about">
-        <h2>About Me</h2>
-        <div class="image-placeholder" style="border-radius: 50%; width: 200px; height: 200px; margin: 0 auto 2rem;">[ Headshot ]</div>
-        <p>I bridge the gap between academic research and production engineering. My philosophy is "Simplicity is a feature." I believe in building honest baselines, measuring rigorously, and only adding complexity when the data proves it earns its place in the codebase.</p>
-        <a href="mailto:assem.elqersh@gmail.com" class="btn-primary" style="margin-top: 2rem;">Email Me to Build Your Next Feature</a>
-    </section>
-
     <footer>
-        <p>&copy; 2026 Assem ElQersh. Designed and coded natively.</p>
+        <p>&copy; 2026 Assem ElQersh. Designed natively.</p>
     </footer>
 </body>
 </html>
