@@ -38,3 +38,4 @@ venv/
 # --- IDEs and Agent Temp Files ---------------------------------------------
 .cursor/
 work/mcp_proof.txt
+submissions/
