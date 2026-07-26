@@ -27,9 +27,12 @@
 To prove the end-to-end functionality, the agent was successfully executed inside the Claude Desktop free tier.
 
 ### Execution Proof
-*(Please ensure your screenshot images are saved in this folder with the names below)*
-![MCP Tools Requesting Permission](mcp_permission.png)
-![Claude Agent Output](mcp_output.png)
+
+<div align="center">
+  <img src="mcp_permission.png" alt="MCP Tools Requesting Permission" />
+  <br><br>
+  <img src="mcp_output.png" alt="Claude Agent Output" />
+</div>
 
 ### Prompt Used
 > "You are the FlyRank Semantic SEO Intelligence Agent. Your goal is to find where content and search intent diverge.
