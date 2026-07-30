@@ -31,7 +31,7 @@
     <div class="authors">By Assem ElQersh</div>
 
     <div class="abstract">
-        <strong>Abstract:</strong> Identifying which search queries are silently losing traffic is a critical challenge for high-volume content platforms. This research leverages 79 million rows of production search data to predict content decay using historical performance metrics. We engineered an honest validation pipeline that strictly isolates client data (Grouped Split) and eliminates time-window target leakage. While a naive baseline model reported a 98% precision score, our rigorous, leakage-free methodology produced a realistic 34% Precision@50, proving that standard cross-validation heavily overestimates true predictive power. This model serves as the foundation for our ranked editorial action playbook, prioritizing high-impact content refreshes without relying on flawed, "time-machine" predictions.
+        <strong>Abstract:</strong> Identifying which search queries are silently losing traffic is a critical challenge for high-volume content platforms. This research leverages 79 million rows of production search data to predict content decay using historical performance metrics. We engineered an honest validation pipeline that strictly isolates client data (Grouped Split) and eliminates time-window target leakage. While a naive baseline model reported a 98% precision score, our rigorous, leakage-free methodology produced a realistic 36% Precision@50, proving that standard cross-validation heavily overestimates true predictive power. This model serves as the foundation for our ranked editorial action playbook, prioritizing high-impact content refreshes without relying on flawed, "time-machine" predictions.
     </div>
 
     <h2>1. Introduction & Question</h2>
@@ -75,11 +75,11 @@
             </tr>
             <tr>
                 <td><strong>Honest Grouped Split (No Leakage)</strong></td>
-                <td><strong>34.0%</strong></td>
+                <td><strong>36.0%</strong></td>
             </tr>
         </tbody>
     </table>
-    <p>By forcing the model to generalize to new clients and removing its "time machine," we exposed massive score inflation. The final 34.0% precision, while much lower than the naive baseline, represents the true, honest capability of the model in production.</p>
+    <p>By forcing the model to generalize to new clients and removing its "time machine," we exposed massive score inflation. The final 36.0% precision, while much lower than the naive baseline, represents the true, honest capability of the model in production.</p>
 
     <h2>5. Limitations</h2>
     <p>This research contains the following boundaries and limitations:</p>
