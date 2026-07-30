@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicting Content Decay at Scale - Research Paper</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+        h2 { border-bottom: 2px solid #eaecef; padding-bottom: 0.3em; margin-top: 2rem; }
+        .abstract { font-size: 1.1rem; font-style: italic; background: #f6f8fa; padding: 1.5rem; border-left: 4px solid #0366d6; }
+        .authors { font-weight: bold; color: #586069; margin-bottom: 2rem; }
+        table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; }
+        th, td { border: 1px solid #dfe2e5; padding: 0.6em 1em; text-align: left; }
+        th { background-color: #f6f8fa; font-weight: bold; }
+        code { background-color: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace; font-size: 85%; }
+        .footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #eaecef; font-size: 0.9em; color: #586069; text-align: center; }
+        a { color: #0366d6; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Predicting Content Decay at Scale: An Honest Machine Learning Approach</h1>
+    <div class="authors">By Assem ElQersh</div>
+
+    <div class="abstract">
+        <strong>Abstract:</strong> Identifying which search queries are silently losing traffic is a critical challenge for high-volume content platforms. This research leverages 79 million rows of production search data to predict content decay using historical performance metrics. We engineered an honest validation pipeline that strictly isolates client data (Grouped Split) and eliminates time-window target leakage. While a naive baseline model reported a 98% precision score, our rigorous, leakage-free methodology produced a realistic 34% Precision@50, proving that standard cross-validation heavily overestimates true predictive power. This model serves as the foundation for our ranked editorial action playbook, prioritizing high-impact content refreshes without relying on flawed, "time-machine" predictions.
+    </div>
+
+    <h2>1. Introduction & Question</h2>
+    <p><strong>The Problem:</strong> The FlyRank platform manages millions of URLs. Content naturally decays over time as competitors update their pages or search intent shifts. Waiting for traffic to drop to zero before taking action results in lost revenue.</p>
+    <p><strong>The Question:</strong> Can we predict which pages are beginning to decay (lose impression share) based on historical search metrics, content age, and past performance, so that the editorial team can refresh them <em>before</em> they lose their rankings?</p>
+    <p>This research supports proactive, automated decision-making by surfacing a prioritized queue of "at-risk" URLs for the editorial team.</p>
+
+    <h2>2. Data</h2>
+    <p>The dataset utilized is the <strong>FlyRank Content Refresh</strong> dataset, an anonymized sample derived from 79 million rows of real production search data.</p>
+    <ul>
+        <li><strong>Time Windows:</strong> The data aggregates historical metrics (e.g., 90-day impressions) and calculates trend directions over fixed intervals.</li>
+        <li><strong>Exclusions:</strong> All Personally Identifiable Information (PII), exact search queries, and client names were rigorously excluded to ensure public safety. Client IDs are represented as anonymous hashes.</li>
+        <li><strong>Features Used:</strong> <code>days_since_last_update</code>, <code>word_count</code>, <code>avg_position</code>, <code>content_age_days</code>.</li>
+    </ul>
+
+    <h2>3. Methodology</h2>
+    <p>To build an honest predictive model, we had to dismantle several structural flaws that plague standard machine learning setups:</p>
+    <ol>
+        <li><strong>The Label Definition:</strong> We defined "decaying" (<code>is_declining = 1</code>) as content where <code>trend_direction == 'down'</code>.</li>
+        <li><strong>The Leakage Audit (No Time Machines):</strong> The <code>trend_direction</code> is mathematically derived from <code>impressions_last_30d</code> and <code>impressions_prev_30d</code>. Including <code>impressions_last_30d</code> or <code>impressions_90d</code> as predictive features gave the model explicit knowledge of the future (Target Leakage). We strictly dropped these leaky features.</li>
+        <li><strong>Honest Validation Design (Grouped Split):</strong> A naive random split allows pages from the same client to exist in both the training and testing sets. Because clients have distinct traffic baselines, the model could "cheat" by memorizing client profiles. We utilized a <code>GroupShuffleSplit</code> on <code>client_id</code> to ensure the model was evaluated on completely unseen clients.</li>
+    </ol>
+
+    <h2>4. Results (vs baseline)</h2>
+    <p>The performance delta between the flawed baseline models and our honest model was staggering:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Methodology</th>
+                <th>Precision@50</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Naive Random Split (Leaky Features)</td>
+                <td><strong>98.0%</strong></td>
+            </tr>
+            <tr>
+                <td>Honest Grouped Split (Leaky Features)</td>
+                <td>58.0%</td>
+            </tr>
+            <tr>
+                <td><strong>Honest Grouped Split (No Leakage)</strong></td>
+                <td><strong>34.0%</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <p>By forcing the model to generalize to new clients and removing its "time machine," we exposed massive score inflation. The final 34.0% precision, while much lower than the naive baseline, represents the true, honest capability of the model in production.</p>
+
+    <h2>5. Limitations</h2>
+    <p>This research contains the following boundaries and limitations:</p>
+    <ul>
+        <li><strong>Seasonality:</strong> The model does not understand temporal intent. It will mistakenly flag seasonal pages (e.g., "Summer Clothing") as decaying when their season ends.</li>
+        <li><strong>Evergreen Stability:</strong> Highly static pages (e.g., definitions) may be flagged due to age and low volatility, requiring human review to prevent unnecessary rewrites.</li>
+        <li><strong>Causal vs. Descriptive:</strong> The feature importances discovered in this analysis are strictly descriptive decision-support mechanisms, not causal drivers. Modifying a page's word count will not automatically reverse its decay.</li>
+    </ul>
+
+    <h2>6. Ranked Recommendations (The Action Playbook)</h2>
+    <p>Based on our verified methodology, we established the following ranked triage system for the editorial team. This yielded <strong>3,400 actionable items</strong> in our final test queue:</p>
+    <ol>
+        <li><strong>Priority 1 (Full Refresh):</strong> Pages ranking 11-20 with high impressions (>1,000) that haven't been updated in 180+ days.<br><em>Action: Update facts, expand thin sections, and improve internal linking.</em></li>
+        <li><strong>Priority 2 (Snippet Optimization):</strong> Pages ranking on Page 1 (1-10) with massive impressions but CTR &lt; 1%.<br><em>Action: Rewrite title tags and meta descriptions to improve SERP click-through rates.</em></li>
+        <li><strong>Priority 3 (Consolidate):</strong> Pages with overlapping semantic intent.<br><em>Action: 301 redirect the weaker page to the stronger page.</em></li>
+    </ol>
+    <p><strong>No-Go List:</strong> Scripts are strictly forbidden from automatically deleting content or rewriting legal/compliance policies based on model scores.</p>
+
+    <h2>7. Reproducibility</h2>
+    <ul>
+        <li><strong>Source Code & Artifacts:</strong> The full suite of exploratory analysis, baseline models, and leakage audits are available in the <a href="https://github.com/Assem-ElQersh/FlyRank-ML-Internship" target="_blank">GitHub Repository</a>.</li>
+        <li><strong>Execution:</strong> The Jupyter Notebooks in the repository are designed to run cleanly top-to-bottom using the standard Python data science stack.</li>
+    </ul>
+
+    <div class="footer">
+        <h2>8. Acknowledgments & Data Credit</h2>
+        <p>Built on the FlyRank ML Internship dataset. Special thanks to the <a href="https://flyrank.ai" target="_blank">FlyRank Platform</a> for providing the anonymized production search data that made this research possible.</p>
+    </div>
+</body>
+</html>
