@@ -3,110 +3,415 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predicting Content Decay at Scale - Research Paper</title>
+    <title>Predicting Content Decay at Scale | FlyRank Capstone</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
+        :root {
+            --bg-color: #0d1117;
+            --text-main: #c9d1d9;
+            --text-heading: #ffffff;
+            --accent-primary: #58a6ff;
+            --accent-secondary: #8a2be2;
+            --card-bg: rgba(22, 27, 34, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: 12px;
         }
-        h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-        h2 { border-bottom: 2px solid #eaecef; padding-bottom: 0.3em; margin-top: 2rem; }
-        .abstract { font-size: 1.1rem; font-style: italic; background: #f6f8fa; padding: 1.5rem; border-left: 4px solid #0366d6; }
-        .authors { font-weight: bold; color: #586069; margin-bottom: 2rem; }
-        table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; }
-        th, td { border: 1px solid #dfe2e5; padding: 0.6em 1em; text-align: left; }
-        th { background-color: #f6f8fa; font-weight: bold; }
-        code { background-color: #f6f8fa; padding: 0.2em 0.4em; border-radius: 3px; font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace; font-size: 85%; }
-        .footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #eaecef; font-size: 0.9em; color: #586069; text-align: center; }
-        a { color: #0366d6; text-decoration: none; }
-        a:hover { text-decoration: underline; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(88, 166, 255, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(138, 43, 226, 0.08), transparent 25%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: var(--text-heading);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #58a6ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .authors {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--accent-primary);
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        /* Staggered animation delays for cards */
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+
+        h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            color: var(--text-heading);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 24px;
+            background: var(--accent-primary);
+            border-radius: 4px;
+        }
+
+        h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.4rem;
+            color: var(--text-heading);
+            margin: 1.5rem 0 1rem 0;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            color: var(--text-heading);
+            font-weight: 600;
+        }
+
+        code {
+            font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            background: rgba(255, 255, 255, 0.1);
+            color: #79c0ff;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-heading);
+            font-weight: 600;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+        
+        tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            position: relative;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-primary);
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+
+        a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--card-border);
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-box {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #79c0ff 0%, #d2a8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8b949e;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .card { padding: 1.5rem; }
+            .container { padding: 2rem 1rem; }
+        }
     </style>
 </head>
 <body>
-    <h1>Predicting Content Decay at Scale: An Honest Machine Learning Approach</h1>
-    <div class="authors">By Assem ElQersh</div>
+    <div class="container">
+        <header>
+            <h1>Predicting Content Decay at Scale: An Honest Machine Learning Approach</h1>
+            <div class="authors">By Assem ElQersh</div>
+        </header>
 
-    <div class="abstract">
-        <strong>Abstract:</strong> Identifying which search queries are silently losing traffic is a critical challenge for high-volume content platforms. This research leverages 79 million rows of production search data to predict content decay using historical performance metrics. We engineered an honest validation pipeline that strictly isolates client data (Grouped Split) and eliminates time-window target leakage. While a naive baseline model reported a 98% precision score, our rigorous, leakage-free methodology produced a realistic 36% Precision@50, proving that standard cross-validation heavily overestimates true predictive power. This model serves as the foundation for our ranked editorial action playbook, prioritizing high-impact content refreshes without relying on flawed, "time-machine" predictions.
-    </div>
+        <section class="card">
+            <h2>Abstract</h2>
+            <p>Identifying which search queries are silently losing traffic is a critical challenge for high-volume content platforms. This research leverages a massive, real-world data warehouse snapshot (v20260703) containing over 81.7 million rows of production search data to predict content decay using historical performance metrics. Working with an unbalanced panel star schema, we engineered an honest validation pipeline that strictly isolates client data (Grouped Split) and eliminates time-window target leakage. While a naive baseline model reported a 98% precision score due to feature leakage, our rigorous methodology produced a realistic 36% Precision@50, proving that standard cross-validation heavily overestimates true predictive power in temporal search data. This model serves as the foundation for our ranked editorial action playbook, prioritizing high-impact content refreshes proactively.</p>
+        </section>
 
-    <h2>1. Introduction & Question</h2>
-    <p><strong>The Problem:</strong> The FlyRank platform manages millions of URLs. Content naturally decays over time as competitors update their pages or search intent shifts. Waiting for traffic to drop to zero before taking action results in lost revenue.</p>
-    <p><strong>The Question:</strong> Can we predict which pages are beginning to decay (lose impression share) based on historical search metrics, content age, and past performance, so that the editorial team can refresh them <em>before</em> they lose their rankings?</p>
-    <p>This research supports proactive, automated decision-making by surfacing a prioritized queue of "at-risk" URLs for the editorial team.</p>
+        <section class="card">
+            <h2>1. Introduction & Problem Statement</h2>
+            <p>The FlyRank platform manages millions of URLs. Content naturally decays over time as competitors update their pages, search algorithms shift, or search intent changes. Waiting for traffic to drop to zero before taking action results in severe, irrecoverable lost revenue.</p>
+            <p><strong>The Objective:</strong> Can we predict which pages are beginning to decay (lose impression share) based on historical search metrics, content age, and past performance, so that the editorial team can refresh them <em>before</em> they lose their rankings?</p>
+            <p>This research supports proactive, automated decision-making by surfacing a prioritized, actionable queue of "at-risk" URLs for the editorial team without relying on flawed, time-traveling predictive models.</p>
+        </section>
 
-    <h2>2. Data</h2>
-    <p>The dataset utilized is the <strong>FlyRank Content Refresh</strong> dataset, an anonymized sample derived from 79 million rows of real production search data.</p>
-    <ul>
-        <li><strong>Time Windows:</strong> The data aggregates historical metrics (e.g., 90-day impressions) and calculates trend directions over fixed intervals.</li>
-        <li><strong>Exclusions:</strong> All Personally Identifiable Information (PII), exact search queries, and client names were rigorously excluded to ensure public safety. Client IDs are represented as anonymous hashes.</li>
-        <li><strong>Features Used:</strong> <code>days_since_last_update</code>, <code>word_count</code>, <code>avg_position</code>, <code>content_age_days</code>.</li>
-    </ul>
+        <section class="card">
+            <h2>2. The Data Warehouse</h2>
+            <p>The foundation of this research is the <strong>FlyRank Internship — Pseudonymized Warehouse Release (v20260703)</strong>. Unlike traditional, clean toy datasets, this represents a frozen snapshot of a massive production data warehouse configured in a star schema.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">81.8M</div>
+                    <div class="stat-label">Total Rows (Warehouse)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">409K</div>
+                    <div class="stat-label">Unique Content Pages</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">104</div>
+                    <div class="stat-label">Enterprise Clients</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">104</div>
+                    <div class="stat-label">Unique Clients</div>
+                </div>
+            </div>
 
-    <h2>3. Methodology</h2>
-    <p>To build an honest predictive model, we had to dismantle several structural flaws that plague standard machine learning setups:</p>
-    <ol>
-        <li><strong>The Label Definition:</strong> We defined "decaying" (<code>is_declining = 1</code>) as content where <code>trend_direction == 'down'</code>.</li>
-        <li><strong>The Leakage Audit (No Time Machines):</strong> The <code>trend_direction</code> is mathematically derived from <code>impressions_last_30d</code> and <code>impressions_prev_30d</code>. Including <code>impressions_last_30d</code> or <code>impressions_90d</code> as predictive features gave the model explicit knowledge of the future (Target Leakage). We strictly dropped these leaky features.</li>
-        <li><strong>Honest Validation Design (Grouped Split):</strong> A naive random split allows pages from the same client to exist in both the training and testing sets. Because clients have distinct traffic baselines, the model could "cheat" by memorizing client profiles. We utilized a <code>GroupShuffleSplit</code> on <code>client_id</code> to ensure the model was evaluated on completely unseen clients.</li>
-    </ol>
+            <h3>Data Architecture & Complexity</h3>
+            <ul>
+                <li><strong>Unbalanced Panel Data:</strong> The dataset exhibits severe class and structural imbalances. As defined in the `dim_clients` table, per-client history depth differs significantly based on when a client onboarded (`gsc_data_start` and `gad_data_start`), requiring time-aware handling.</li>
+                <li><strong>Privacy & Security:</strong> All records use salted, namespaced, and fingerprinted hash keys (e.g., `client_hash_id`). Exact search queries, PII, and client names were rigorously excluded to ensure public safety.</li>
+                <li><strong>Feature Space:</strong> Predictive features utilized include <code>days_since_last_update</code>, <code>word_count</code>, <code>avg_position</code>, and <code>content_age_days</code>, aggregated over distinct historical windows.</li>
+            </ul>
+        </section>
 
-    <h2>4. Results (vs baseline)</h2>
-    <p>The performance delta between the flawed baseline models and our honest model was staggering:</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Methodology</th>
-                <th>Precision@50</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Naive Random Split (Leaky Features)</td>
-                <td><strong>98.0%</strong></td>
-            </tr>
-            <tr>
-                <td>Honest Grouped Split (Leaky Features)</td>
-                <td>58.0%</td>
-            </tr>
-            <tr>
-                <td><strong>Honest Grouped Split (No Leakage)</strong></td>
-                <td><strong>36.0%</strong></td>
-            </tr>
-        </tbody>
-    </table>
-    <p>By forcing the model to generalize to new clients and removing its "time machine," we exposed massive score inflation. The final 36.0% precision, while much lower than the naive baseline, represents the true, honest capability of the model in production.</p>
+        <section class="card">
+            <h2>3. Methodology</h2>
+            <p>To build an honest predictive model, we had to dismantle several structural flaws that plague standard machine learning setups when dealing with panel data:</p>
+            <ol>
+                <li><span class="highlight">The Label Definition:</span> We defined "decaying" (<code>is_declining = 1</code>) as content where the calculated <code>trend_direction == 'down'</code> based on recent vs. historical baselines.</li>
+                <li><span class="highlight">The Leakage Audit (No Time Machines):</span> The <code>trend_direction</code> is mathematically derived from <code>impressions_last_30d</code> and <code>impressions_prev_30d</code>. Including <code>impressions_last_30d</code> or <code>impressions_90d</code> as predictive features gave the model explicit knowledge of the future (Target Leakage). We strictly audited and dropped these leaky features.</li>
+                <li><span class="highlight">Honest Validation Design (Grouped Split):</span> A naive random split allows pages from the same client to exist in both the training and testing sets. Because clients have distinct traffic baselines and onboarding dates, the model could "cheat" by memorizing client profiles. We utilized a <code>GroupShuffleSplit</code> on <code>client_id</code> to ensure the model was evaluated on completely unseen clients.</li>
+            </ol>
+        </section>
 
-    <h2>5. Limitations</h2>
-    <p>This research contains the following boundaries and limitations:</p>
-    <ul>
-        <li><strong>Seasonality:</strong> The model does not understand temporal intent. It will mistakenly flag seasonal pages (e.g., "Summer Clothing") as decaying when their season ends.</li>
-        <li><strong>Evergreen Stability:</strong> Highly static pages (e.g., definitions) may be flagged due to age and low volatility, requiring human review to prevent unnecessary rewrites.</li>
-        <li><strong>Causal vs. Descriptive:</strong> The feature importances discovered in this analysis are strictly descriptive decision-support mechanisms, not causal drivers. Modifying a page's word count will not automatically reverse its decay.</li>
-    </ul>
+        <section class="card">
+            <h2>4. Results (vs baseline)</h2>
+            <p>The performance delta between the flawed baseline models and our honest model exposed massive score inflation commonly found in industry benchmarks:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Methodology</th>
+                        <th>Precision@50</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Naive Random Split (Leaky Features)</td>
+                        <td style="color: #ff7b72; font-weight: bold;">98.0% (Inflated)</td>
+                    </tr>
+                    <tr>
+                        <td>Honest Grouped Split (Leaky Features)</td>
+                        <td>58.0%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Honest Grouped Split (No Leakage)</strong></td>
+                        <td style="color: #3fb950; font-weight: bold;">36.0% (True Capability)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>By forcing the model to generalize to new clients and removing its "time machine," we established a realistic baseline. The final 36.0% precision represents the true, honest capability of the model in production when facing unseen client data.</p>
+        </section>
 
-    <h2>6. Ranked Recommendations (The Action Playbook)</h2>
-    <p>Based on our verified methodology, we established the following ranked triage system for the editorial team. This yielded <strong>3,400 actionable items</strong> in our final test queue:</p>
-    <ol>
-        <li><strong>Priority 1 (Full Refresh):</strong> Pages ranking 11-20 with high impressions (>1,000) that haven't been updated in 180+ days.<br><em>Action: Update facts, expand thin sections, and improve internal linking.</em></li>
-        <li><strong>Priority 2 (Snippet Optimization):</strong> Pages ranking on Page 1 (1-10) with massive impressions but CTR &lt; 1%.<br><em>Action: Rewrite title tags and meta descriptions to improve SERP click-through rates.</em></li>
-        <li><strong>Priority 3 (Consolidate):</strong> Pages with overlapping semantic intent.<br><em>Action: 301 redirect the weaker page to the stronger page.</em></li>
-    </ol>
-    <p><strong>No-Go List:</strong> Scripts are strictly forbidden from automatically deleting content or rewriting legal/compliance policies based on model scores.</p>
+        <section class="card">
+            <h2>5. Limitations</h2>
+            <p>This research operates within the following boundaries and limitations:</p>
+            <ul>
+                <li><strong>Seasonality Blindness:</strong> The model does not understand temporal intent. It will mistakenly flag seasonal pages (e.g., "Summer Clothing") as decaying when their season ends, as it cannot differentiate between cyclical drops and structural decay.</li>
+                <li><strong>Evergreen Stability:</strong> Highly static pages (e.g., dictionary definitions) may be flagged due to age and low volatility. These require human review to prevent unnecessary rewrites.</li>
+                <li><strong>Causal vs. Descriptive:</strong> The feature importances discovered in this analysis are strictly descriptive decision-support mechanisms, not causal drivers. Artificially modifying a page's word count will not automatically reverse its decay.</li>
+            </ul>
+        </section>
 
-    <h2>7. Reproducibility</h2>
-    <ul>
-        <li><strong>Source Code & Artifacts:</strong> The full suite of exploratory analysis, baseline models, and leakage audits are available in the <a href="https://github.com/Assem-ElQersh/FlyRank-ML-Internship" target="_blank">GitHub Repository</a>.</li>
-        <li><strong>Execution:</strong> The Jupyter Notebooks in the repository are designed to run cleanly top-to-bottom using the standard Python data science stack.</li>
-    </ul>
+        <section class="card">
+            <h2>6. Ranked Recommendations (The Action Playbook)</h2>
+            <p>Based on our verified methodology, we established the following ranked triage system for the editorial team. This pipeline yielded <strong>3,400 actionable items</strong> in our final test queue:</p>
+            
+            <div style="background: rgba(88, 166, 255, 0.1); border-left: 4px solid var(--accent-primary); padding: 1.5rem; margin-top: 1.5rem; border-radius: 0 8px 8px 0;">
+                <h3 style="margin-top: 0; font-size: 1.2rem;">Priority 1: The Full Refresh</h3>
+                <p style="margin-bottom: 0;">Pages ranking 11-20 with high impressions (>1,000) that haven't been updated in 180+ days.<br>
+                <span class="highlight">Action:</span> Update facts, expand thin sections, and improve internal linking structure.</p>
+            </div>
+            
+            <div style="background: rgba(138, 43, 226, 0.1); border-left: 4px solid var(--accent-secondary); padding: 1.5rem; margin-top: 1rem; border-radius: 0 8px 8px 0;">
+                <h3 style="margin-top: 0; font-size: 1.2rem;">Priority 2: Snippet Optimization</h3>
+                <p style="margin-bottom: 0;">Pages ranking on Page 1 (positions 1-10) with massive impressions but CTR &lt; 1%.<br>
+                <span class="highlight">Action:</span> Rewrite title tags and meta descriptions to improve SERP click-through rates.</p>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.05); border-left: 4px solid #8b949e; padding: 1.5rem; margin-top: 1rem; border-radius: 0 8px 8px 0;">
+                <h3 style="margin-top: 0; font-size: 1.2rem;">Priority 3: Content Consolidation</h3>
+                <p style="margin-bottom: 0;">Pages exhibiting severe decay with overlapping semantic intent to stronger pages.<br>
+                <span class="highlight">Action:</span> 301 redirect the weaker, decaying page to the stronger authoritative page.</p>
+            </div>
+            
+            <p style="margin-top: 1.5rem;"><strong>No-Go List:</strong> Automation scripts are strictly forbidden from automatically deleting content or rewriting legal/compliance policies based on model scores.</p>
+        </section>
 
-    <div class="footer">
-        <h2>8. Acknowledgments & Data Credit</h2>
-        <p>Built on the FlyRank ML Internship dataset. Special thanks to the <a href="https://flyrank.ai" target="_blank">FlyRank Platform</a> for providing the anonymized production search data that made this research possible.</p>
+        <section class="card">
+            <h2>7. Reproducibility</h2>
+            <p>To ensure total transparency, the methodology and pipelines can be reproduced:</p>
+            <ul>
+                <li><strong>Source Code & Artifacts:</strong> The full suite of exploratory data analysis, baseline modeling, and leakage audits are available in the <a href="https://github.com/Assem-ElQersh/FlyRank-ML-Internship" target="_blank">GitHub Repository</a>.</li>
+                <li><strong>Execution:</strong> The Jupyter Notebooks in the repository are designed to run cleanly top-to-bottom using the standard Python data science stack.</li>
+            </ul>
+        </section>
+
+        <div class="footer">
+            <h2>8. Acknowledgments & Data Credit</h2>
+            <p>Built on the FlyRank ML Internship dataset. Special thanks to the <a href="https://flyrank.ai" target="_blank">FlyRank Platform</a> for providing the 81.7M row pseudonymized production search data warehouse that made this research possible.</p>
+        </div>
     </div>
 </body>
 </html>
