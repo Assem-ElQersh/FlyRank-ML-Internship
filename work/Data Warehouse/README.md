@@ -25,13 +25,21 @@ While this number is smaller than the 36% we saw on our heavily down-sampled toy
 *(Note: The following images will be added after re-running the notebook on Google Colab.)*
 
 ### 1. Client Onboarding Cohorts (Unbalanced Panel)
-*This chart illustrates how clients onboarded at varying dates, proving the necessity of the `gsc_data_start` constraint in our pipeline.*
+*This chart illustrates how clients onboarded at varying dates, proving the necessity of the `gsc_data_start` constraint in our pipeline to prevent data leakage.*
 
 ![Client Onboarding Cohorts](cohorts_visualization.png)
-*(Upload your visualization here)*
 
-### 2. Feature Importance / Metric Distribution
-*This chart breaks down the true distribution of daily sessions and impressions across the 81.8M rows.*
+### 2. Distribution of Content Types
+*A breakdown of the half a million content pages in the warehouse.*
 
-![Feature/Metric Distribution](distribution_visualization.png)
-*(Upload your visualization here)*
+![Content Types](content_types.png)
+
+### 3. The Long Tail of SEO (Impressions Distribution)
+*This log-scale distribution of the massive 6M-row June partition proves the Pareto principle—most impressions go to a small fraction of the pages.*
+
+![Impressions Distribution](impressions_distribution.png)
+
+### 4. Query Depth per Page
+*An analysis of the 90-day query fact table showing how many distinct keywords typically drive traffic to a single piece of content.*
+
+![Query Depth](query_depth.png)
