@@ -1,5 +1,7 @@
 # FlyRank Data Warehouse: Exploratory Data Analysis (EDA)
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Assem-ElQersh/FlyRank-ML-Internship/blob/main/work/Data%20Warehouse/big_data_eda.ipynb)
+
 This directory contains the core exploratory data analysis against the remote FlyRank production data warehouse snapshot on Hugging Face (`FlyRank/internship-warehouse`).
 
 ## Key Insights from EDA
