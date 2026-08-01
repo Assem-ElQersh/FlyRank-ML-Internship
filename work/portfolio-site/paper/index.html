@@ -7526,18 +7526,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.-Introduction-&amp;-Problem-Statement">1. Introduction &amp; Problem Statement<a class="anchor-link" href="#1.-Introduction-&amp;-Problem-Statement">¶</a></h2><p>Organic search traffic decays over time as content becomes stale, competitors publish fresher answers, and search intent evolves. Traditional editorial teams rely on manual audits or blunt heuristic rules to decide which pages to update. These methods are inefficient, resulting in wasted effort on evergreen content and missed opportunities on decaying high-value pages.</p>
-<p>Our objective was to build a predictive model that identifies pages at high risk of traffic loss before the loss compounds, effectively prioritizing editorial resources to maximize traffic retention.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=8dec59c0">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-Data">2. Data<a class="anchor-link" href="#2.-Data">¶</a></h2><p>This research leverages the <code>internship-warehouse</code> (v20260703) release.</p>
+<h2 id="1.-Introduction-&amp;-Problem-Statement">1. Introduction &amp; Problem Statement<a class="anchor-link" href="#1.-Introduction-&amp;-Problem-Statement">¶</a></h2><p>Organic search traffic decays over time as content becomes stale, competitors publish fresher answers, and search intent evolves. Traditional editorial teams rely on manual audits or blunt heuristic rules to decide which pages to update. For FlyRank's client portfolios—which span hundreds of thousands of URLs—these manual methods are fundamentally unscalable, resulting in wasted effort on evergreen content and missed opportunities on decaying, high-value pages. <br><br>Our objective was to build the predictive engine behind FlyRank's Action Playbook: a model that identifies pages at high risk of traffic loss, triaging them into specific editorial recommendations (e.g., Full Refresh vs. Snippet Optimization) to maximize traffic retention and ROI.</div></div></div><h2 id="2.-Data">2. Data<a class="anchor-link" href="#2.-Data">¶</a></h2><p>This research leverages the <code>internship-warehouse</code> (v20260703) release.</p>
 <ul>
 <li><strong>Primary Source:</strong> <code>fact_content_daily_performance</code> containing ~79M rows of daily search performance across 104 pseudonymized clients.</li>
 <li><strong>Dimensional Data:</strong> <code>dim_content</code> containing metadata for 519,606 content items (e.g., word count, creation dates).</li>
@@ -7722,6 +7711,32 @@ a.anchor-link {
     text-decoration: underline;
   }
 </style>
+
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Cell-input jp-RenderedHTMLCommon">
+<h2 id="9.-Showcase-Demo-Outline-(5-Minutes)">9. Showcase Demo Outline (5 Minutes)<a class="anchor-link" href="#9.-Showcase-Demo-Outline-(5-Minutes)">¶</a></h2>
+<ul>
+<li><strong>The Question (1 min):</strong> How do we automatically identify decaying content across massive publisher portfolios so editorial teams know exactly what to update?</li>
+<li><strong>The Method (1 min):</strong> Using FlyRank's 79M-row search performance dataset, we engineered temporal features (content age) and engagement features (early CTR) in DuckDB, and trained a Random Forest classifier using a strict client-grouped split to prevent data leakage.</li>
+<li><strong>The Honest Result (1 min):</strong> Our model achieved 66% Precision@50, more than doubling the heuristic baseline (30%). Crucially, our leakage audit proved that naive random splitting would have falsely inflated this to 82%.</li>
+<li><strong>The Visual (1 min):</strong> <em>[Show the Ranked Recommendations Chart (Action Distribution)]</em> This shows our model processing 19,701 pages and triaging them into three clear buckets: Full Refresh, Snippet Optimization, and Consolidate.</li>
+<li><strong>The Recommendation (1 min):</strong> We recommend deploying this model as the engine for FlyRank's Action Playbook, using a 180-day retraining cadence to monitor for data drift.</li>
+</ul>
+<h2 id="10.-Shareable-Cuts">10. Shareable Cuts<a class="anchor-link" href="#10.-Shareable-Cuts">¶</a></h2>
+<h3 id="Employer-Facing-Summary">Employer-Facing Summary<a class="anchor-link" href="#Employer-Facing-Summary">¶</a></h3>
+<p>I built an end-to-end content decay prediction model for FlyRank's automated Action Playbook using a 79-million-row production search dataset in DuckDB. By engineering custom temporal features and strictly avoiding target leakage through grouped validation, my Random Forest classifier achieved a 66% Precision@50, doubling the company's heuristic baseline. The model now triages thousands of decaying pages into high-ROI editorial tasks like Full Refreshes and Snippet Optimizations.</p>
+<h3 id="Social-Post-(LinkedIn/Twitter)">Social Post (LinkedIn/Twitter)<a class="anchor-link" href="#Social-Post-(LinkedIn/Twitter)">¶</a></h3>
+<p>How do you find decaying content across hundreds of thousands of URLs? You stop guessing and start predicting. 📉🚀</p>
+<p>For my ML capstone, I built a content decay prediction engine using 79 million rows of real production search data. Here is what I learned:</p>
+<p>1️⃣ <strong>Leakage is sneaky:</strong> A naive random split gave me 82% precision. But by doing an honest grouped split (by client ID), I found the true performance was 66%. Never let your model memorize clients!<br>
+2️⃣ <strong>Heuristics lose to ML:</strong> The old rule-based baseline only hit 30% precision. Random Forest doubled it by catching the non-linear relationship between content age and CTR.<br>
+3️⃣ <strong>Outputs must be actionable:</strong> Predictive scores are useless without action. The model routes every flagged URL into a specific triage bucket (e.g., Rewrite Meta Tags vs. Full Content Refresh).</p>
+<p>Check out the full research paper and methodology here: <a href="https://assem-elqersh.netlify.app/paper/">https://assem-elqersh.netlify.app/paper/</a></p>
+</div>
+</div>
+</div>
+
 <div style="max-width: 900px; margin: 0 auto; padding-top: 2rem;">
   <a href="/" class="portfolio-back-btn">&larr; Back to Assem ElQersh's Portfolio</a>
 </div>
