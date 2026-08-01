@@ -7579,7 +7579,7 @@ a.anchor-link {
 <li><strong>XGBoost:</strong> 42.0%</li>
 <li><strong>Random Forest:</strong> <strong>66.0%</strong></li>
 </ul>
-<p>Random Forest emerged as the superior model, effectively handling the extreme outliers inherent in SEO traffic data without overfitting.</p>
+<p>Random Forest emerged as the superior model, effectively handling the extreme outliers inherent in SEO traffic data without overfitting.<br><br><img src="../figures/model_comparison.png" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: block; margin: 2rem auto;"></p>
 <h3 id="Feature-Importances">Feature Importances<a class="anchor-link" href="#Feature-Importances">¶</a></h3><p>The model leaned heavily on <code>content_age_days</code> (0.26) and <code>early_ctr</code> (0.26). This mathematically proves that content decay is a function of both <em>time</em> (staleness) and <em>relevance</em> (user engagement).</p>
 <h3 id="Validation-Audit">Validation Audit<a class="anchor-link" href="#Validation-Audit">¶</a></h3><p>Our methodology checks confirmed that naive approaches yield dangerously inflated scores:</p>
 <ul>
@@ -7610,7 +7610,7 @@ a.anchor-link {
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="6.-Ranked-Recommendations-(The-Action-Playbook)">6. Ranked Recommendations (The Action Playbook)<a class="anchor-link" href="#6.-Ranked-Recommendations-(The-Action-Playbook)">¶</a></h2><p>Applying the model to the June 2026 dataset, we generated a human-reviewed action queue of <strong>19701</strong> URLs, triaged into three priority buckets:</p>
+<h2 id="6.-Ranked-Recommendations-(The-Action-Playbook)">6. Ranked Recommendations (The Action Playbook)<a class="anchor-link" href="#6.-Ranked-Recommendations-(The-Action-Playbook)">¶</a></h2><p>Applying the model to the June 2026 dataset, we generated a human-reviewed action queue of <strong>19701</strong> URLs, triaged into three priority buckets:<br><br><img src="../figures/action_distribution.png" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: block; margin: 2rem auto;"><br></p>
 <ol>
 <li><strong>P1: Striking Distance &amp; Stale -&gt; Full Refresh (2865 URLs):</strong> High traffic, ranking 11-20, and &gt;180 days old. Action: Update facts and expand content to push to Page 1.</li>
 <li><strong>P2: High Traffic, Low CTR -&gt; Snippet Optimization (3264 URLs):</strong> Ranking on Page 1 but failing to earn clicks. Action: Rewrite title tags and meta descriptions.</li>
