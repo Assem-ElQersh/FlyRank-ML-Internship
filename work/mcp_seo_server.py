@@ -1,6 +1,9 @@
 from mcp.server.fastmcp import FastMCP
 import duckdb
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Create the FastMCP Server
 mcp = FastMCP("FlyRank_Data_Warehouse_Agent")

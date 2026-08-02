@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 import sys
 from mcp_seo_server import get_warehouse_schema, find_decaying_content
 
@@ -11,16 +14,16 @@ def run_demo():
     print("1. Agent executing: get_warehouse_schema()")
     print(get_warehouse_schema())
     
-    print("\n2. Agent executing: find_decaying_content('client_789')")
+    print("\n2. Agent executing: find_decaying_content('client_73cda7b4e4f265ea')")
     print("Connecting to DuckDB httpfs... Querying 81M row remote dataset...")
     
     if hf_token:
         # Run the real query if token is present
-        result = find_decaying_content('client_789')
+        result = find_decaying_content('client_73cda7b4e4f265ea')
         print(result)
     else:
         # Mock the result instantly so the demo video can be recorded without waiting 30 seconds
-        print("--- Decaying Content Report for Client client_789 ---")
+        print("--- Decaying Content Report for Client client_73cda7b4e4f265ea ---")
         print("Content ID: c_99214 | Imps: 15420 | CTR: 0.85%")
         print("Content ID: c_10482 | Imps: 12100 | CTR: 1.10%")
         print("Content ID: c_55391 | Imps: 9805 | CTR: 0.45%")
