@@ -64,7 +64,7 @@ def find_decaying_content(client_id: str) -> str:
                 SUM(gsc_clicks) as total_clicks,
                 AVG(gsc_avg_position) as avg_pos
             FROM read_parquet('{REL}/fact_content_daily_performance/month=2026-06/*.parquet')
-            WHERE client_hash_id = '{client_id}'
+            WHERE client_hash_id = ?
             GROUP BY 1
             HAVING SUM(gsc_impressions) > 1000
         )
@@ -78,7 +78,7 @@ def find_decaying_content(client_id: str) -> str:
         ORDER BY m.total_imps DESC
         LIMIT 5
         """
-        df = con.execute(query).df()
+        df = con.execute(query, [client_id]).df()
         
         report = f"--- Decaying Content Report for Client {client_id} ---\n"
         if df.empty:
