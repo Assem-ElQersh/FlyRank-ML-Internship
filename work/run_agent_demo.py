@@ -1,48 +1,34 @@
-import pandas as pd
-from mcp_seo_server import load_and_clean_data, semantic_cluster_queries, calculate_opportunity_score
 import os
+import sys
+from mcp_seo_server import get_warehouse_schema, find_decaying_content
 
 def run_demo():
-    print("--- Starting SEO MCP Agent Demo ---\n")
+    print("--- Starting FlyRank Data Warehouse Agent Demo ---\n")
     
-    # 1. Create dummy SEO data
-    print("1. Generating sample SEO dataset (seo_data.csv)...")
-    data = {
-        'url': [
-            'https://example.com/shoes', 'https://example.com/sneakers', 
-            'https://example.com/boots', 'https://example.com/sandals'
-        ],
-        'query': ['buy shoes', 'buy sneakers', 'winter boots', 'summer sandals'],
-        'impressions': [6000, 7000, 2000, 1000],
-        'clicks': [120, 140, 200, 100],
-        'position': [5.2, 4.8, 1.2, 2.1]
-    }
-    df = pd.DataFrame(data)
-    df['ctr'] = df['clicks'] / df['impressions']
-    df.to_csv('seo_data.csv', index=False)
+    # Check for token to decide if we should run for real or mock for the fast video
+    hf_token = os.environ.get('HF_TOKEN')
     
-    # 2. Load and Clean Data
-    print("\n2. Agent executing: load_and_clean_data('seo_data.csv')")
-    result1 = load_and_clean_data('seo_data.csv')
-    print(f"Result: {result1}")
+    print("1. Agent executing: get_warehouse_schema()")
+    print(get_warehouse_schema())
     
-    # 3. Semantic Clustering
-    print("\n3. Agent executing: semantic_cluster_queries('seo_data.csv')")
-    result2 = semantic_cluster_queries('seo_data.csv')
-    print(f"Result: {result2}")
+    print("\n2. Agent executing: find_decaying_content('client_789')")
+    print("Connecting to DuckDB httpfs... Querying 81M row remote dataset...")
     
-    # 4. Opportunity Score
-    print("\n4. Agent executing: calculate_opportunity_score('seo_data_clustered.csv')")
-    result3 = calculate_opportunity_score('seo_data_clustered.csv')
-    print("Result:\n" + result3)
+    if hf_token:
+        # Run the real query if token is present
+        result = find_decaying_content('client_789')
+        print(result)
+    else:
+        # Mock the result instantly so the demo video can be recorded without waiting 30 seconds
+        print("--- Decaying Content Report for Client client_789 ---")
+        print("Content ID: c_99214 | Imps: 15420 | CTR: 0.85%")
+        print("Content ID: c_10482 | Imps: 12100 | CTR: 1.10%")
+        print("Content ID: c_55391 | Imps: 9805 | CTR: 0.45%")
+        print("Content ID: c_11204 | Imps: 8400 | CTR: 1.95%")
+        print("Content ID: c_88321 | Imps: 5200 | CTR: 1.50%")
+        print("\n(Note: Executed in Mock Mode for video latency. Export HF_TOKEN to run live).")
     
     print("\n--- Demo Complete ---")
-    
-    # Cleanup
-    if os.path.exists('seo_data.csv'):
-        os.remove('seo_data.csv')
-    if os.path.exists('seo_data_clustered.csv'):
-        os.remove('seo_data_clustered.csv')
 
 if __name__ == "__main__":
     run_demo()

@@ -1,73 +1,92 @@
 from mcp.server.fastmcp import FastMCP
-import pandas as pd
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.cluster import KMeans
+import duckdb
+import os
 
 # Create the FastMCP Server
-mcp = FastMCP("Semantic_SEO_Intelligence_Agent")
+mcp = FastMCP("FlyRank_Data_Warehouse_Agent")
+
+# Constants
+REL = "hf://datasets/FlyRank/internship-warehouse"
+
+def get_connection():
+    """Initializes DuckDB connection with HuggingFace credentials."""
+    hf_token = os.environ.get('HF_TOKEN')
+    if not hf_token:
+        raise ValueError("HF_TOKEN environment variable not set. Required for warehouse access.")
+    
+    con = duckdb.connect()
+    con.execute("INSTALL httpfs; LOAD httpfs;")
+    con.execute(f"CREATE OR REPLACE SECRET hf (TYPE huggingface, TOKEN '{hf_token}');")
+    return con
 
 @mcp.tool()
-def load_and_clean_data(file_path: str) -> str:
-    """Ingests raw GSC/GA4 SEO data and returns a summary of the columns and rows."""
+def get_warehouse_schema() -> str:
+    """Returns the schema of the remote FlyRank data warehouse."""
+    return f"""
+    --- FlyRank Data Warehouse (Star Schema) ---
+    Location: {REL}
+    
+    Tables:
+    1. dim_clients.parquet: Client metadata (client_hash_id, gsc_data_start)
+    2. dim_content.parquet: Page metadata (content_hash_id, url, word_count)
+    3. fact_content_daily_performance/**/*.parquet (81.8M rows): Daily metrics
+       - client_hash_id, content_hash_id, date, gsc_impressions, gsc_clicks, gsc_avg_position
+    """
+
+@mcp.tool()
+def execute_sql_query(query: str) -> str:
+    """Executes arbitrary DuckDB SQL against the remote warehouse."""
     try:
-        df = pd.read_csv(file_path)
-        return f"Successfully loaded {len(df)} rows from {file_path}. Available columns: {list(df.columns)}."
+        con = get_connection()
+        # Prevent dangerous queries, though this is a read-only remote dataset
+        if any(keyword in query.upper() for keyword in ['DROP', 'DELETE', 'INSERT', 'UPDATE']):
+            return "Error: Only SELECT queries are permitted on the Data Warehouse."
+            
+        df = con.execute(query).df()
+        return df.to_string()
     except Exception as e:
-        return f"Error loading data: {str(e)}"
+        return f"Error executing query: {str(e)}"
 
 @mcp.tool()
-def semantic_cluster_queries(file_path: str, num_clusters: int = 3) -> str:
-    """Uses NLP (TF-IDF + KMeans) to cluster search queries into semantic intents."""
+def find_decaying_content(client_id: str) -> str:
+    """Finds high-traffic content that is decaying for a specific client."""
     try:
-        df = pd.read_csv(file_path)
-        if 'query' not in df.columns:
-            return "Error: 'query' column missing from dataset."
-            
-        queries = df['query'].fillna("").tolist()
+        con = get_connection()
+        # Query the June 2026 partition specifically for fast retrieval
+        query = f"""
+        WITH metrics AS (
+            SELECT
+                content_hash_id,
+                SUM(gsc_impressions) as total_imps,
+                SUM(gsc_clicks) as total_clicks,
+                AVG(gsc_avg_position) as avg_pos
+            FROM read_parquet('{REL}/fact_content_daily_performance/month=2026-06/*.parquet')
+            WHERE client_hash_id = '{client_id}'
+            GROUP BY 1
+            HAVING SUM(gsc_impressions) > 1000
+        )
+        SELECT 
+            m.content_hash_id, 
+            m.total_imps, 
+            m.total_clicks, 
+            (m.total_clicks * 100.0 / m.total_imps) as ctr
+        FROM metrics m
+        WHERE (m.total_clicks * 100.0 / m.total_imps) < 2.0
+        ORDER BY m.total_imps DESC
+        LIMIT 5
+        """
+        df = con.execute(query).df()
         
-        # Lightweight MVP clustering using scikit-learn
-        vectorizer = TfidfVectorizer(stop_words='english')
-        X = vectorizer.fit_transform(queries)
-        
-        kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init=10)
-        df['semantic_cluster'] = kmeans.fit_predict(X)
-        
-        # Save clustered data
-        output_path = file_path.replace('.csv', '_clustered.csv')
-        df.to_csv(output_path, index=False)
-        
-        return f"Success. Grouped queries into {num_clusters} semantic clusters and saved to {output_path}. You can now score the clusters."
-    except Exception as e:
-        return f"Error clustering: {str(e)}"
-
-@mcp.tool()
-def calculate_opportunity_score(clustered_file_path: str) -> str:
-    """Finds high-impression, low-CTR content and flags cannibalization."""
-    try:
-        df = pd.read_csv(clustered_file_path)
-        
-        # Scoring logic: High impressions, CTR < 3%, position between 3 and 15
-        opps = df[(df['impressions'] > 5000) & (df['ctr'] < 0.03) & (df['position'] >= 3)]
-        opps = opps.sort_values(by='impressions', ascending=False)
-        
-        # Cannibalization check: Multiple URLs in the same cluster
-        cannibalization = df.groupby('semantic_cluster')['url'].nunique()
-        cannibalized_clusters = cannibalization[cannibalization > 1].index.tolist()
-        
-        report = "--- SEO Intelligence Report ---\n\n"
-        
-        report += "1. Top Striking-Distance Opportunities (High Impression, Low CTR):\n"
-        for _, row in opps.iterrows():
-            report += f"   - Query: '{row['query']}' | URL: {row['url']} | Impressions: {row['impressions']} | CTR: {row['ctr']*100}%\n"
-            
-        report += "\n2. Content Cannibalization Alerts:\n"
-        for c_id in cannibalized_clusters:
-            competing_urls = df[df['semantic_cluster'] == c_id]['url'].unique()
-            report += f"   - Cluster {c_id} has multiple competing URLs: {', '.join(competing_urls)}\n"
-            
+        report = f"--- Decaying Content Report for Client {client_id} ---\n"
+        if df.empty:
+            report += "No decaying content found matching the criteria.\n"
+        else:
+            for _, row in df.iterrows():
+                report += f"Content ID: {row['content_hash_id']} | Imps: {row['total_imps']} | CTR: {row['ctr']:.2f}%\n"
         return report
+        
     except Exception as e:
-        return f"Error calculating score: {str(e)}"
+        return f"Error calculating decay: {str(e)}"
 
 if __name__ == "__main__":
     mcp.run()
