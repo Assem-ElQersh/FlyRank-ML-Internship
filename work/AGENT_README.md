@@ -64,3 +64,6 @@ python run_agent_demo.py
 1. **Read-Only**: The agent can only execute `SELECT` statements. It cannot mutate data in the warehouse.
 2. **Network Dependency**: Because it queries Hugging Face remotely via HTTPFS, execution time is highly dependent on bandwidth. A timeout could occur on extremely complex JOINs across all 81 million rows.
 3. **No Caching Layer**: Queries are re-executed from scratch every time, which wastes bandwidth if the LLM repeatedly asks the same question. Future versions need a local Redis or SQLite cache.
+
+## AI Transparency Framework Note
+*I built this FastMCP agent, including the DuckDB httpfs integration and the mcp_seo_server.py logic, utilizing Claude and Antigravity as my AI build partners. I independently verified the SQL aggregation logic, tested the cross-environment compatibility, and verified the output correctness against raw parquet files manually.*
